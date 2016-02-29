@@ -1,0 +1,68 @@
+/****/
+#include <iostream>
+#include <cstdlib>
+#include <fstream>
+#include <list>
+#include <string>
+using namespace std;
+
+int index(string word)
+{
+   int x = 0;
+   for (int i = 0; i < word.size(); i++)
+      x +=  word[i];
+   return x % 67;  
+}
+
+void hashing(string word, list<string> * array)
+{
+   int y = index(word);
+   array[y].push_back(word);
+}
+
+void display(string word, list<string> * array)
+{
+
+   for(int i = 0; i< 67; i++)
+   {
+      cout << "table[" << i << "]";
+      if (i < 10)
+      {
+         cout << " -> ";                 
+      }
+      if (i >= 10)
+      {
+         cout << "-> ";                 
+      }
+   
+      if (array[i].empty()) 
+         cout << "(empty)" << endl;
+      else // (array[i] == array[index(word)])
+      {
+         cout << word << endl;
+      }
+      array[i].pop(word);
+   }
+}
+
+int main(int argc, char* argv[])
+{
+   list<string> array[67];
+
+   ifstream inFile;
+   inFile.open(argv[argc - 1]);
+   if (inFile.fail())
+   {
+      cout << "open file error " << argv[argc - 1] << endl;
+      exit(1);
+   }
+   
+   string word;
+   while(inFile >> word)
+   {
+      hashing(word, array); 
+   }
+   display(word, array);
+   return 0;
+}
+

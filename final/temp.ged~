@@ -1,0 +1,119 @@
+0 @I1@ INDI
+1 NAME Gregory Lawrence /Cameron/
+2 GIVN Gregory Lawrence
+2 SURN Cameron
+1 SEX M
+1 BIRT
+2 DATE 8 NOV 1963
+2 PLAC Tacoma,Pierce,Washington
+1 REFN 1
+1 BAPL
+2 DATE 22 MAR 1980
+2 PLAC Tacoma,Pierce,Washington
+1 ENDL
+2 DATE 30 OCT 1982
+2 TEMP SEATT
+1 FAMC @F1@
+1 NOTE !BIRTH/PLACE
+2 CONT  - Personal Interviews and Records
+2 CONT    Greg Cameron, Larry Cameron, Bonnie (Downen) Cameron
+2 CONT    Lists birth as 8 Nov 1963 in Tacoma, Pierce, Washington
+2 CONT
+2 CONT !MARRIAGE/PLACE
+2 CONT  - Personal Interviews and Records
+2 CONT    Greg Cameron, Larry Cameron, Bonnie (Downen) Cameron
+2 CONT    Lists marriage as 25 May 1985 in Idaho Falls, Bonneville, 
+Idaho
+2 CONT
+2 CONT - Personal Interviews and Records
+2 CONT   Marriage for time only in Las Vegas Temple 6 Aug 1999
+2 CONT
+2 CONT *Lived in Tacoma, Wa for 17 years - 9918 E Tyler
+2 CONT *Worked for his father as a logger all his life
+2 CONT *Joined Church while in high school-aged 16-Mar 22, 1980
+2 CONT *Graduate of Franklin Pierce High School-June 1982
+2 CONT *Served Mission in Scotland from Nov 1982-May 1984
+2 CONT *Attended Ricks College from Sept 1984-Apr 1986.  Major Mathe\
+matics
+2 CONT *Met 1st wife at Ricks
+2 CONT *Attended Utah State University from Sept 1986 to June 1988. \
+ Major Mathematics
+2 CONT *Moved to Maryland July 1988 to work at the National Security\
+ Agency as a Mathematician.  Liv
+2 CONC ed in Severn, Maryland
+2 CONT *Moved to Columbia, Maryland July 1990
+2 CONT *Moved to Rexburg, Idaho July 1993
+2 CONT *Taught Math/Computer Science at Ricks College from 1993 - pr\
+esent
+2 CONT *Met second wife over internet Feb 1999
+1 CHAN
+2 DATE 1 DEC 1999
+3 TIME 00:00:00
+0 @I2@ INDI
+1 NAME Lawrence Clyde /Cameron/
+2 GIVN Lawrence Clyde
+2 SURN Cameron
+1 SEX M
+1 BIRT
+2 DATE 22 DEC 1941
+2 PLAC Port Angles,Clallam,Washington
+1 REFN 2
+1 FAMS @F1@
+1 FAMC @F2@
+1 NOTE !BIRTH/PLACE
+2 CONT  - Personal Interviews
+2 CONT    Larry Cameron
+2 CONT    Lists birth as 22 Dec 1941 in Port Angeles, Clallam, Washi\
+ngton
+2 CONT
+2 CONT !MARRIAGE/PLACE
+2 CONT  - Personal Interviews
+2 CONT    Larry Cameron
+2 CONT    Lists marriages 1) 22 Jun 1963, Port Angeles to Bonnie L. \
+Downen
+2 CONT                    2) 24 May 1981, Port Angeles to Linda Gaxi\
+ola
+2 CONT
+2 CONT *Lived in Port Angles, Wa for 22 years
+2 CONT *Worked on fathers farm while in his youth
+2 CONT *Graduate of Port Angles High School in 1959
+2 CONT *Served in the navy from 1959-1962 in submarines
+2 CONT *Moved to Tacoma in l963
+2 CONT *Worked at U.S. Oil and Refinery for 6 years
+2 CONT *Sarted Logging business with Army Mueller - 1968
+2 CONT *Worked as Logger since 1968
+2 CONT *Divorced in Nov. l980
+2 CONT *Moved out to Graham in l981
+2 CONT *Semi-retired from logging Sept 1990
+2 CONT *Adopted April and Autumn (Linda's children)
+1 CHAN
+2 DATE 25 AUG 1999
+3 TIME 01:00:00
+0 @I3@ INDI
+1 NAME Bonnie Lorraine /Downen/
+2 GIVN Bonnie Lorraine
+2 SURN Downen
+1 SEX F
+1 BIRT
+2 DATE 28 MAR 1945
+2 PLAC Snowqualmie Fall,King,Washington
+1 REFN 3
+1 BAPL
+2 DATE 29 MAR 1982
+2 TEMP LV
+1 ENDL
+2 DATE 30 MAR 1983
+2 TEMP SE
+1 FAMS @F1@
+1 FAMC @F3@
+1 NOTE !BIRTH/PLACE
+2 CONT  - Family Group Sheet
+2 CONT    Compiled by Family
+2 CONT    Lists birth as 28 Mar 1945
+2 CONT    (See Marsh Family)
+2 CONT
+2 CONT  - Personal Interviews
+2 CONT    Bonnie Downen
+2 CONT    Gives birth as 28 Mar 1945 in Snowqualmie Falls, Washingto\
+n
+2 CONT    (See Cameron Family)

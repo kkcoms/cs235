@@ -1,0 +1,44 @@
+/*********************************************************/
+#ifndif GRADE_H
+#define GRADE_H
+#include iostream
+
+class Grade
+{
+  private:
+   // int number;
+   int * data;//pointer to array of intergers
+   int arraySize;//declares an variable to hold array size
+   
+  public:
+   Grade()//default constructor
+   {
+      data = new int[];//sets it as a new dynamically allocated array
+      arraySize = 0;//sets the size to 0
+   }
+   Grade grade(int data)
+   {
+   }
+   ~Grade grade()
+   {
+   }
+   // std::string getNumber(std::string number){return number};
+   // void setNumber(std::string number)
+   // {
+   //  this number = number;
+   // }
+   int getData(int data){return data};
+   void setData(int data)//, std::string letter, std::string number)
+   {
+      //  this data[0] = letter;
+      // this data[1] = number;
+   }
+
+   int addData();//should function as a linked list.
+   bool checkData();//use a string compare
+   
+
+   friend operator && ( 
+};
+
+#endif

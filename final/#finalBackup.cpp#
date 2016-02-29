@@ -1,0 +1,584 @@
+/******************************************************************************
+* Program:
+*    Assignment 256, Genealogy list tree beast
+*    Brother Ercanbrack, CS 235
+* Author:
+*    Tyler Scott
+* Summary: 
+*
+*
+*   Estimated time: 8.0hrs
+*   Actual time: 4.0hrs
+******************************************************************************/
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <fstream>
+using namespace std;
+
+/*****************************************************************************
+ * Node class definition for building a single linked list of integers.
+ *****************************************************************************/
+template <typename T> class Node
+{
+   private:
+      T data;                 // --- data in each node
+      Node<T>* next;               // --- pointer to next node
+
+   public:
+      Node();                   // --- Creates empty node
+      Node<T>* getNext();          // --- returns next pointer of a node
+      T getData();            // --- returns data of a node
+      void setData(T item);   // ---stores item in data member of current node
+      void setNext(Node<T>* node); // --- sets next to point to node
+};
+
+/******************************************************************************
+* This class provides a dynamically allocated linked list implementation of a
+* general list. It includes functions for creating, copying, and destroying a
+* linked list data structure. It includes functions for inserting, removing,
+* and retrieving data anywhere in the linked list data structure.
+******************************************************************************/
+template <typename T> class List
+{
+   private:
+      int numItems;
+      Node<T>* firstNode;
+
+   public:
+      List();
+      ~List();                    // destructor - free the entire linked list 
+      List(const List<T> &listToCopy);  // copy constructor
+      List& operator = (const List<T> &rightSide);
+      void insert(T item); // insert item at the specified position
+      void remove(int pos);          // remove item at the specified   position
+      T lookup(T item) const;    // returns position of item (zero relative)
+      T getData(int pos) const;    // returns data located at the position
+      int empty(void) const;         // check for empty list(0=empty 1=not empty)
+      int getNumItems(void) const;   // return # of items in the linked list
+};
+
+class genInfo
+{
+   private:
+      string firstName;
+      string lastName;
+      string birthday;
+      string birthYear;
+      string code;
+
+   public:
+      genInfo();
+      string getFirst() const;
+      void setFirst(string firstName);
+      string getLast() const;
+      void setLast(string lastName);
+      string getBirth() const;
+      void setBirth(string birthday);
+      string getBYear() const;
+      void setBYear(string birthYear);
+      string getCode() const;
+      void setCode(string code);
+      bool operator < (const genInfo &rightSide);
+};
+   
+/******************************************************************************
+ * Default constructor needs to be totally empty so it can work with stuff
+ *****************************************************************************/
+template <typename T>
+Node<T> :: Node()                   // --- Creates empty node
+{
+//   this->data = data;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "next"
+ *****************************************************************************/
+template <typename T>
+Node<T>* Node<T> :: getNext()
+{
+   return next; // --- returns next pointer of a node
+}
+
+/******************************************************************************
+ * Grants access to the private variable "data"
+ *****************************************************************************/
+template <typename T>
+T Node<T> :: getData()
+{
+   return data; // --- returns data of a node
+}
+
+/******************************************************************************
+ * Sets the value of Data to what is passed in through the parameters
+ *****************************************************************************/
+template <typename T>
+void Node<T> :: setData(T item)
+{
+   data = item; // --- stores item in data member of current node
+}
+
+/******************************************************************************
+ * Sets the value of "next" to what is passed in through the parameters
+ *****************************************************************************/
+template <typename T>
+void Node<T> :: setNext(Node<T>* node)
+{
+   next = node; // --- sets next to point to node
+}
+
+/******************************************************************************
+ * Default Constructor
+ *****************************************************************************/
+template <typename T>
+List<T> :: List()
+{
+   numItems = 0;
+   firstNode = NULL;
+}
+
+/******************************************************************************
+ * Destructor clears out the list
+ *****************************************************************************/
+template <typename T>
+List<T> :: ~List()
+{
+   while (firstNode != NULL)
+   {
+      Node<T>* deletor = firstNode;
+      firstNode = firstNode->getNext();
+      delete deletor;
+   }
+}
+
+/******************************************************************************
+ * Copy Constructor
+ *****************************************************************************/
+template <typename T>
+List<T> :: List(const List<T> &listToCopy)
+{
+   numItems = 0;
+   firstNode = 0;
+   
+   for (int i = 0; i < listToCopy.numItems; i++)
+   {
+      insert(listToCopy.getData(i));
+   }   
+}
+
+/******************************************************************************
+ * Assignment Operator
+ *****************************************************************************/
+template <typename T>
+List<T>& List<T> :: operator = (const List<T> &rightSide)
+{
+   while (firstNode != NULL)
+   {
+      Node<T>* deletor = firstNode;
+      firstNode = firstNode->getNext();
+      delete deletor;
+   }
+
+   numItems = 0;
+   firstNode = NULL;
+   
+   for (int i = 0; i < rightSide.getNumItems(); i++)
+   {
+      insert(rightSide.getData(i));
+   }   
+}
+
+/******************************************************************************
+ * The insert function puts things (nodes) into the list. in the right places
+ *****************************************************************************/
+///NEED TO MODIFY IT
+template <typename T>
+void List<T> :: insert(T item)
+{
+   // cerr << "in insert\n";
+   // check to make sure position is pointing within the list boundaries
+   // Set up some new nodes
+   Node<T>* stuff = new Node<T>(); 
+   Node<T>* curr = firstNode;
+   stuff->setData(item); // set one of them with the data passed in
+   
+   // check to make sure its not the first position, or if the list is empty
+     if (empty())
+     {
+      firstNode = stuff;
+      stuff->setNext(curr); // set the next node as the current one
+      numItems++; // increment the number of items since adding one
+      cout <<"inserted item as only item";
+      return;
+     }
+
+     //head insert
+     if (stuff->getData() < firstNode->getData())
+      {
+         stuff->setNext(firstNode); // set the next node
+         numItems++; // increment the number of items since adding one   
+         cout <<"inserted item as head";
+         return;
+      }
+      //middle insert
+     while(curr->getNext() != NULL)
+     {
+     //  cerr << "while\n";
+        if (stuff->getData() < curr->getData())
+        {
+           stuff->setNext(curr->getNext()); // set the next node
+           curr->setNext(stuff); // set the current node to the temp node
+           numItems++; // increment the number of items since adding one
+           cout <<"inserted item in middle";
+           return;
+        }
+         curr = curr->getNext();
+      }
+     //tail insert.
+     //   if (curr->getData() < stuff->getData())
+     //  {  
+        curr->setNext(stuff); // set the current node to the temp node       
+        numItems++; // increment the number of items since adding one
+        cout <<"inserted item as end";
+        return;
+//     }
+}
+
+/******************************************************************************
+ * Remove deletes an item in the specified position of the list
+ *****************************************************************************/
+template <typename T>
+void List<T> :: remove(int pos)
+{
+   // check to make sure position is pointing within the list boundaries
+   if (pos < 0 || pos > numItems)
+   {
+      if (pos < 0)
+         pos = 0;
+      else
+         pos = numItems - 1;
+   }
+   
+   Node<T>* curr = firstNode;
+   // check to make sure its not the first position, or if the list is empty
+   if (pos < 1 || firstNode == NULL) 
+   {
+      firstNode = curr->getNext(); // point the first to the next
+      delete curr; // delete the current one
+   }
+
+   else
+   {
+      for (int i = 1; i < pos; i++)
+      {
+         curr = curr->getNext(); // set the current node to point to the next 
+      }
+      Node<T>* remove = curr->getNext();// make a temp one set to the node being
+                                      // removed
+      curr->setNext(remove->getNext()); // set the next node to the temp ones
+      delete remove; // delete it
+   }   
+   numItems--;  // decrement the number of items
+}
+
+/******************************************************************************
+ * The lookup function walks through the list to check if a specific item
+ * is located in the list.
+ *****************************************************************************/
+template <typename T>
+T List<T> :: lookup(T item) const
+{
+   Node<T>* search = firstNode; // set up a temporary node to search with
+   for (int i = 0; i < numItems; i++) 
+   {
+      if (search->getData() == item) // if the search matches an item return
+         return i;
+      search = search->getNext(); // set to the next node and keep looping
+   }
+   return -1; // it was not in the list
+}
+
+/******************************************************************************
+ * Gets the Data from each node in the list
+ *****************************************************************************/
+template <typename T>
+T List<T> :: getData(int pos) const
+{
+//   if (pos < 0 || pos > numItems) // if the postion is pointing to outside
+      //    return *this;
+                      // the list boundaries end
+   Node<T>* temp = firstNode; // set up a temp holder
+   for (int i = 0; i < pos; i++)
+   {
+      temp = temp->getNext(); // walk through the list, point to the next
+   }
+   return temp->getData(); // return the data recieved
+}
+
+/******************************************************************************
+ * Checks to see if the list is empty 
+ *****************************************************************************/
+template <typename T>
+int List<T> :: empty(void) const
+{
+   if (firstNode == NULL) // if the first node is pointing to Null its empty
+      return 1;
+   else
+      return 0;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+template <typename T>
+int List<T> :: getNumItems(void) const
+{
+   return numItems;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+genInfo :: genInfo()
+{
+   firstName = "_";
+   lastName = "_";
+   birthday = "_";
+   birthYear = "_";
+   code = "_";
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+string genInfo :: getFirst() const
+{
+   return firstName;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+void Node :: setFirst(string firstName)
+{
+   this->firstName = firstName;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+string Node :: getLast() const
+{
+   return lastName;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+void Node :: setLast(string lastName)
+{
+   this->lastName = lastName;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+string Node :: getBirth() const
+{
+   return birthday;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+void Node :: setBirth(string birthday)
+{
+   this-> birthday = birthday;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+string Node :: getBYear() const
+{
+   return birthYear;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+void Node :: setBYear(string birthYear)
+{
+   this-> birthYear = birthYear;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+string Node :: getCode() const
+{
+   return code;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+void Node :: setCode(string code)
+{
+   this->code = code;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+bool genInfo :: operator < (const genInfo &rightSide)
+{
+   cerr<< "in operator?\n";
+   string tempA = this->lastName;
+   string tempB = rightSide.getLast();
+   tempA[0] = toupper(tempA[0]);
+   tempB[0] = toupper(tempB[0]);
+   if (tempA < tempB)
+      return true;
+   else if (tempA > tempB)
+      return false;
+   else
+   {
+      tempA = this->firstName;
+      tempB = rightSide.getFirst();
+      tempA[0] = toupper(tempA[0]);
+      tempB[0] = toupper(tempB[0]);
+      if (tempA < tempB)
+         return true;
+      else if (tempA > tempB)
+         return false;
+      else
+      {
+         tempA = this->birthYear;
+         tempB = rightSide.getBYear();
+         if (tempA < tempB)
+            return true;
+         else if (tempA > tempB)
+            return false;
+         else
+         {
+            tempA = this->birthday;
+            tempB = rightSide.getBirth(); 
+            if (tempA < tempB)
+               return true;
+            else if (tempA >= tempB)
+               return false;
+         }
+      }
+   }
+}
+/******************************************************************************
+ * Main controls what happens
+ *****************************************************************************/
+int main(int argc, char** argv)
+{
+    // input the file from the command line
+   string filename = "";
+   if (argc == 2)
+      filename = argv[1];
+   else
+      getline(cin, filename);
+
+   // Opening the file
+   ifstream fin;
+   fin.open(filename.c_str()); // open the file
+   if (fin.fail())
+   {
+      cout << "Error reading File...";
+      return 0; // if the file cant open display error
+   }
+   string input;
+   genInfo* record = new genInfo();
+   List<genInfo>* pedigree = new List<genInfo>();
+   getline(fin, input); // get firstline
+   bool firstCase = true;
+   while (!fin.eof())
+   {
+      if (input.substr(2,2) == "@I") //new record
+      {
+         genInfo* temp;// = new genInfo(); //make new record           
+         temp = record;
+         pedigree->insert(*temp);  //save old/previos record
+         record = new genInfo();
+         if (firstCase)
+         {
+            genInfo* temp;// = new genInfo(); //make new record           
+            temp = record;
+            pedigree->insert(*temp);  //save old/previos record
+            record = new genInfo();
+            firstCase = false;
+         }
+         record->setCode(input.substr(4,1));
+      }
+      if (input.substr(2,4) == "SURN") //surname
+         record->setLast(input.substr(7, input.length()));
+      
+      if (input.substr(2,4) == "GIVN") //given name
+         record->setFirst(input.substr(7, input.length()));
+      
+      if (input.substr(2,4) == "BIRT") //birth date
+      {
+         getline(fin, input);
+         if (input.substr(2,4) == "DATE")
+         {
+            record->setBirth(input.substr(7, input.length()));
+            //  if (input.find("/") != string::npos)
+            //  record.setBYear(input.substr(7, input.length()));
+            //else
+            //   record.setBYear(input.substr(13, input.length())); 
+            //getting the year as a seperate integer makes sorting
+            // easier
+        }
+      }    
+          getline(fin, input);
+          /*         cout << "entries: " << pedigree->getNumItems();
+      cout << "index code: " << record->getCode() << endl;
+      cout << "name: " << record->getLast() << ", "
+           << record->getFirst() << endl;
+      cout << "date of birth: "<< record->getBirth() << " year: "
+           << record->getBYear() << endl;
+          */
+   }  
+   fin.close(); // close the file
+
+
+
+
+   genInfo testA;
+   testA.setLast("Hartley");
+   testA.setFirst("Marc");
+   testA.setCode("1");
+   testA.setBirth("06 Mar 1988");
+   testA.setBYear("1988");
+
+   genInfo testB;
+   testB.setLast("Scott");
+   testB.setFirst("Tyler");
+   testB.setCode("2");
+   testB.setBirth("30 Oct 1991");
+   testB.setBYear("1991");
+
+   List<genInfo>* testC = new List<genInfo>();
+   testC->insert(testA);
+   testC->insert(testB);  
+
+   genInfo temp;
+   for(int i = 0; i < 20; i++)
+   {
+      temp = pedigree->getData(i);
+      cout << "index code: " << temp.getCode() << endl;
+      cout << "name: " << temp.getLast() << ", "
+           << temp.getFirst() << endl;
+      cout << "date of birth: "<< temp.getBirth() << " year: "
+           << temp.getBYear() << endl;
+   }
+
+   return 0;
+}
+
+

@@ -1,0 +1,104 @@
+/******************************************************************************
+* Program:
+*    Assignment 17, Heap Sort
+*    Brother Ercanbrack, CS 235
+* Author:
+*    Tyler Scott
+* Summary:
+* 
+*
+*  Estimated time: 8.0hrs
+*  Actual time: 2.0hrs
+******************************************************************************/
+#include <iostream>
+#include <fstream>
+#include <vector>
+using namespace std;
+
+//PROTOTYPES
+void swap(int &a, int &b);
+void heapify(int a, vector<int> &nums, int n, int hs);
+void buildHeap(vector<int> &nums, int n, int hs);
+void heapSort(vector<int> &nums, int n, int hs);
+
+/******************************************************************************
+ * Main handles everything in this program
+ *****************************************************************************/
+int main(int argc, char* argv[])
+{
+   // open the file from command line
+   ifstream fin;
+   fin.open(argv[argc - 1]);
+   if (fin.fail())
+   {
+      cout << "open file error " << argv[argc - 1] << endl;
+      return 0;
+   }
+   vector<int> nums;
+   int data;
+   int n = 0;
+   int hs = 0;
+
+   while (fin >> data)
+   {
+      nums.push_back(data);
+      n++;
+   }
+   heapSort(nums, n, hs);
+   for (int i = 0; i < nums.size(); i++)
+   {
+
+      cout << nums[i] << " ";
+   }
+   cout << endl;
+   fin.close();
+   return 0;
+}  
+void swap(int &a, int &b)
+{
+    int temp = a;
+    a = b;
+    b = temp;
+}
+void heapify(int a, vector<int> &nums, int n, int hs)
+{
+   int left=(2*a);
+   int right=(2*a)+1;
+   int large;
+   if ((left <= hs) && (nums[left] > nums[a]))
+   {
+      large = left;
+   }
+   else
+   {
+      large = a;
+   }
+   if ((right <= hs) && (nums[right] > nums[large]))
+   {
+        large = right;
+   }
+   if (a != large)
+   {
+      swap(nums[a], nums[large]);
+      heapify(large, nums, n, hs);
+   }
+}
+void buildHeap(vector<int> &nums, int n, int hs)
+{
+    for (int i = n/2; i > 0; i--)
+    {
+       heapify(i, nums, n,  hs);
+    }
+}
+
+void heapSort(vector<int> &nums, int n, int hs)
+{
+   hs = n-1;
+   buildHeap(nums, n, hs);
+   for(int i = hs; i > 1; i--)
+   {
+      swap(nums[1],nums[i]);
+      hs--;
+      heapify(1,nums,n,hs);
+   }
+}
