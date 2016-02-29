@@ -1,0 +1,614 @@
+/******************************************************************************
+* Program:
+*    Assignment 256, genealogy processing 
+*    Brother Ercanbrack, CS 235
+* Author:
+*    Tyler Scott
+* Summary:
+*    This was a pain, parsing the crazy file made for difficult problems
+*
+*
+*  Estimated time: 8.0hrs
+*  Actual time: 20.0hrs
+******************************************************************************/
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+using namespace std;
+
+/*****************************************************************************
+ * Node class definition for building a single linked list of integers.
+ *****************************************************************************/
+class Node
+{
+   private:
+      int data;                 // --- data in each node
+      Node* next;               // --- pointer to next node
+      Node* previous;           // --- pointer to the previous node
+      string firstName;
+      string lastName;
+      string birthday;
+      string birthYear;
+     string code;
+
+   public:
+      Node(int data = 0);                  // --- Creates empty node
+      Node* getNext();        // --- returns next pointer of a node
+      Node* getPrevious();    // --- returns previous pointer of a node
+      int getData();          // --- returns data of a node
+      void setData(int item); // ---stores item in data member of current node
+      void setNext(Node* node); // --- sets next to point to node
+      void setPrevious(Node* node); // --- sets previous to point to node
+   
+      string getFirst() const;
+      void setFirst(string firstName);
+      string getLast() const;
+      void setLast(string lastName);
+      string getBirth() const;
+      void setBirth(string birthday);
+      string getBYear() const;
+      void setBYear(string birthYear);
+      string getCode() const;
+      void setCode(string code);
+      bool operator < (const Node &rightSide);  
+
+};
+
+/*****************************************************************************
+ * This class provides a dynamically allocated linked list implementation of a
+ * general list. It includes functions for creating, copying, and destroying a
+ * linked list data structure. It includes functions for inserting, removing,
+ * and retrieving data anywhere in the linked list data structure.
+ ****************************************************************************/
+class List
+{
+   private:
+      int numItems;
+      Node* firstNode;
+
+   public:
+   List();
+   ~List();                       // destructor - free the entire linked list
+   List(const List &listToCopy);  // copy constructor
+   List& operator = (const List &rightSide); // assignment operator overload
+   void insert(Node* node, int pos); // insert item at the specified position
+   void remove(int pos);          // remove item at the specified position
+   int lookup(int item) const;    // returns position of item (zero relative)
+   int getData(int pos) const;    // returns data located at the position
+   int empty(void) const;        // check for empty list(0=empty 1=not empty)
+   int getNumItems(void) const;   // return # of items in the linked list
+   void display();
+   void insGen(Node* node);
+};
+
+// Node Member Functions
+
+/******************************************************************************
+ * Default constructor needs to be totally empty so it can work with stuff
+ *****************************************************************************/
+Node :: Node(int data)                   // --- Creates empty node
+{
+   this->data = data;
+   next = NULL;
+   previous = NULL;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "next"
+ *****************************************************************************/
+Node* Node :: getNext()
+{
+   return next; // --- returns next pointer of a node
+}
+
+/******************************************************************************
+ * Grants access to the private variable "previous"
+ *****************************************************************************/
+Node* Node :: getPrevious()
+{
+   return previous; // --- returns previous pointer of a node
+}
+
+
+/******************************************************************************
+ * Grants access to the private variable "data"
+ *****************************************************************************/
+int Node :: getData()
+{
+   return data; // --- returns data of a node
+}
+
+/******************************************************************************
+ * Sets the value of Data to what is passed in through the parameters
+ *****************************************************************************/
+void Node :: setData(int item)
+{
+   data = item; // --- stores item in data member of current node
+}
+
+/******************************************************************************
+ * Sets the value of "next" to what is passed in through the parameters
+ *****************************************************************************/
+void Node :: setNext(Node* node)
+{
+   next = node; // --- sets next to point to node
+}
+
+/******************************************************************************
+ * Sets the value of "previous" to what is passed in through the parameters
+ *****************************************************************************/
+void Node :: setPrevious(Node* node)
+{
+   previous = node; // --- sets previous to point to node
+}
+
+/*******************************************************************************
+ * Grants access to the private variable "firstName"
+ *****************************************************************************/
+string Node :: getFirst() const
+{
+   return firstName;
+}
+
+/*******************************************************************************
+ * sets the private variable "firstName"
+ ****************************************************************************/
+void Node :: setFirst(string firstName)
+{
+   this->firstName = firstName;
+}
+
+/*******************************************************************************
+ * Grants access to the private variable "lastName"
+ *****************************************************************************/
+string Node :: getLast() const
+{
+   return lastName;
+}
+
+/*******************************************************************************
+ * sets the private variable "lastName"
+ ****************************************************************************/
+void Node :: setLast(string lastName)
+{
+   this->lastName = lastName;
+}
+
+/*******************************************************************************
+ * Grants access to the private variable "birthday"
+ *****************************************************************************/
+string Node:: getBirth() const
+{
+   return birthday;
+}
+
+/*******************************************************************************
+ * sets the private variable "birthday"
+ ****************************************************************************/
+void Node :: setBirth(string birthday)
+{
+   this-> birthday = birthday;
+}
+
+/*******************************************************************************
+ * Grants access to the private variable "birthYear"
+ *****************************************************************************/
+string Node :: getBYear() const
+{
+   return birthYear;
+}
+
+/*******************************************************************************
+ * sets the private variable "birthYear"
+ ****************************************************************************/
+void Node :: setBYear(string birthYear)
+{
+   this-> birthYear = birthYear;
+}
+
+/*******************************************************************************
+ * Grants access to the private variable "code"
+ *****************************************************************************/
+string Node :: getCode() const
+{
+   return code;
+}
+
+
+/*******************************************************************************
+ * sets the private variable "code"
+ ****************************************************************************/
+void Node :: setCode(string code)
+{
+   this->code = code;
+}
+
+/******************************************************************************
+ * Less than Operator
+ *****************************************************************************/
+bool Node :: operator < (const Node &rightSide)
+{
+//   cerr<< "in operator?\n";
+   string tempA = this->lastName;
+   string tempB = rightSide.getLast();
+   tempA[0] = toupper(tempA[0]);
+   tempB[0] = toupper(tempB[0]);
+   if (tempA < tempB)
+      return true;
+   else if (tempA > tempB)
+      return false;
+   else
+   {
+      tempA = this->firstName;
+      tempB = rightSide.getFirst();
+      tempA[0] = toupper(tempA[0]);
+      tempB[0] = toupper(tempB[0]);
+      if (tempA < tempB)
+         return true;
+      else if (tempA > tempB)
+         return false;
+      else
+      {
+         tempA = this->birthYear;
+         tempB = rightSide.getBYear();
+         if (tempA < tempB)
+            return true;
+         else if (tempA > tempB)
+            return false;
+         else
+         {
+            tempA = this->birthday;
+            tempB = rightSide.getBirth();
+            if (tempA < tempB)
+               return true;
+            else if (tempA >= tempB)
+               return false;
+         }
+      }
+   }
+}
+
+// List Member Functions
+
+/******************************************************************************
+ * Default Constructor
+ *****************************************************************************/
+List :: List()
+{
+   numItems = 0;
+   firstNode = NULL;
+}
+
+/******************************************************************************
+ * Destructor clears out the list
+ *****************************************************************************/
+List :: ~List()
+{
+   while (firstNode != NULL)
+   {
+      Node* deletor = firstNode;
+      firstNode = firstNode->getNext();
+      delete deletor;
+   }
+}
+
+/******************************************************************************
+ * Copy Constructor
+ *****************************************************************************/
+List :: List(const List &listToCopy)
+{
+   numItems = 0;
+   firstNode = 0;
+   
+   for (int i = 0; i < listToCopy.numItems; i++)
+   {
+      //   insert(listToCopy.getData(i), i);
+   }   
+}
+
+/******************************************************************************
+ * Assignment Operator
+ *****************************************************************************/
+List& List :: operator = (const List &rightSide)
+{
+   while (firstNode != NULL)
+   {
+      Node* deletor = firstNode;
+      firstNode = firstNode->getNext();
+      delete deletor;
+   }
+
+   numItems = 0;
+   firstNode = 0;
+   
+   for (int i = 0; i < rightSide.numItems; i++)
+   {
+//      insert(rightSide.getData(i), i);
+   }   
+}
+
+/******************************************************************************
+ * The insert function puts things (nodes) into the list. in the right places
+ *****************************************************************************/
+void List :: insert(Node* node, int pos)
+{
+   // check to make sure position is pointing within the list boundaries
+   if (pos < 0 || pos > numItems)
+   {
+      if (pos < 0)
+         pos = 0;
+      else
+         pos = numItems;
+   }
+   
+   // Set up some new nodes
+   Node* stuff = node;//new Node(); 
+   Node* curr = firstNode;
+//   stuff->setData(item); // set one of them with the data passed in
+
+   // check to make sure its not the first position, or if the list is empty
+   if (pos < 1 || firstNode == NULL) 
+   {
+      stuff->setNext(curr); // set the next node as the current one
+      firstNode = stuff;
+      stuff->setPrevious(NULL);
+   }
+
+  else
+   {
+      for (int i = 1; i < pos; i++)
+      {
+         curr = curr->getNext(); // set the current node to point to the next 
+      }
+      stuff->setNext(curr->getNext()); // set the next node
+      stuff->setPrevious(curr); // set the previous node
+      if (stuff->getNext())
+         stuff->getNext()->setPrevious(stuff);
+      curr->setNext(stuff); // set the current node to the temp node
+   }   
+   numItems++; // increment the number of items since adding one
+}
+
+/******************************************************************************
+ * Remove deletes an item in the specified position of the list
+ *****************************************************************************/
+void List :: remove(int pos)
+{
+   // check to make sure position is pointing within the list boundaries
+   if (pos < 0 || pos > numItems)
+   {
+      if (pos < 0)
+         pos = 0;
+      else
+         pos = numItems - 1;
+   }
+   
+   Node* curr = firstNode;
+   // check to make sure its not the first position, or if the list is empty
+   if (pos < 1 || firstNode == NULL) 
+   {
+      firstNode = curr->getNext(); // point the first to the next
+      delete curr; // delete the current one
+   }
+
+   else
+   {
+      for (int i = 1; i < pos; i++)
+      {
+         curr = curr->getNext(); // set the current node to point to the next 
+      }
+      Node* remove = curr->getNext(); // make a temp one set to the node being
+                                      // removed
+      remove->getNext()->setPrevious(curr);
+      curr->setNext(remove->getNext()); // set the next node to the temp ones
+      delete remove; // delete it
+   }   
+   numItems--;  // decrement the number of items
+}
+
+/******************************************************************************
+ * The lookup function walks through the list to check if a specific item
+ * is located in the list.
+ *****************************************************************************/
+int List :: lookup(int item) const
+{
+   Node* search = firstNode; // set up a temporary node to search with
+   for (int i = 0; i < numItems; i++) 
+   {
+      if (search->getData() == item) // if the search matches an item return
+         return i;
+      search = search->getNext(); // set to the next node and keep looping
+   }
+   return -1; // it was not in the list
+}
+
+/******************************************************************************
+ * Gets the Data from each node in the list
+ *****************************************************************************/
+int List :: getData(int pos) const
+{
+   if (pos < 0 || pos > numItems) // if the postion is pointing to outside 
+      return -1;                  // the list boundaries end
+   Node* temp = firstNode; // set up a temp holder
+   for (int i = 0; i < pos; i++)
+   {
+      temp = temp->getNext(); // walk through the list, point to the next
+   }
+   return temp->getData(); // return the data recieved
+}
+
+/******************************************************************************
+ * Checks to see if the list is empty 
+ *****************************************************************************/
+int List :: empty(void) const
+{
+   if (firstNode == NULL) // if the first node is pointing to Null its empty
+      return 1;
+   else
+      return 0;
+}
+
+/******************************************************************************
+ * Grants access to the private variable "numItems"
+ *****************************************************************************/
+int List :: getNumItems(void) const
+{
+   return numItems;
+}
+
+/******************************************************************************
+ * this is the display function, outputs to the screen for users
+ *****************************************************************************/
+void List::display()
+{
+   Node* disp = firstNode; //set up a new node to point to the first in the list
+   while (disp->getNext() != NULL)
+   {
+      disp = disp->getNext(); // point to the next one
+   }
+   for (; disp!= NULL; disp = disp->getPrevious())
+   {
+      cout << disp->getData(); // display to the screen
+   }
+}
+
+/******************************************************************************
+ * Inserts generation info
+ *****************************************************************************/
+void List::insGen(Node* node)
+{
+   int pos;
+   int temp;
+   for (pos = 0; pos < numItems; pos++)
+   {
+      Node t(getData(pos));
+      if (*node < t)
+         break;
+   }
+   insert(node,pos);
+}
+
+/******************************************************************************
+ * Main executes the functions
+ *****************************************************************************/
+int main(int argc, char* argv[])
+{
+   string filename = "";
+   if (argc == 2)
+      filename = argv[1];
+   else
+      getline(cin, filename);
+
+   // Opening the file
+   ifstream fin;
+   fin.open(filename.c_str()); // open the file
+   if (fin.fail())
+   {
+      cout << "Error reading File...";
+      return 0; // if the file cant open display error
+   }
+   string input;
+   Node* record = new Node();
+   List* pedigree = new List();
+//   getline(fin, input); // get firstline
+   bool firstCase = true;
+/*   while (!fin.eof())
+   {
+      if (input.substr(2,2) == "@I") //new record
+      {
+         Node* temp;// = new genInfo(); //make new record       \
+         temp = record;
+         pedigree->insGen(temp);  //save old/previos record
+         record = new Node();
+         if (firstCase)
+         {
+            Node* temp;// = new genInfo(); //make new record     
+            temp = record;
+            pedigree->insGen(temp);  //save old/previos record
+            record = new Node();
+            firstCase = false;
+         }
+         record->setCode(input.substr(4,1));    
+      }
+      if (input.substr(2,4) == "SURN") //surname
+         record->setLast(input.substr(7, input.length()));
+      
+      if (input.substr(2,4) == "GIVN") //given name
+         record->setFirst(input.substr(7, input.length()));
+      
+      if (input.substr(2,4) == "BIRT") //birth date
+      {
+         getline(fin, input);
+         if (input.substr(2,4) == "DATE")
+         {
+            record->setBirth(input.substr(7, input.length()));
+            //  if (input.find("/") != string::npos)
+            //  record.setBYear(input.substr(7, input.length()));
+            //else
+            //   record.setBYear(input.substr(13, input.length()));
+            //getting the year as a seperate integer makes sorting
+            // easier
+         }
+      }
+      getline(fin, input);
+      }*/
+   while (fin >> input)
+   {
+      //
+      if (input.find("@I") != string::npos)
+      {
+         //if (firstTime)
+         //{
+         Node * temp = new Node();
+         //record->setNext(head);
+         //head = record;
+         // firstTime = false;
+         //}
+
+         getline(fin, input);
+         getline(fin, input);
+         fin >> input >> input;
+         if (input.find("GIVN") != string::npos)
+         {
+            //cout << "test1 ";
+            getline(fin, input);
+
+            input = input.substr(1);
+            cout << input << " ";
+            record->setFirst(input);
+         }
+
+         fin >> input >> input;
+         if (input.find("SURN") != string::npos)
+         {
+            //cout << "test2 ";
+            getline(fin, input);
+            input = input.substr(1);
+            cout << input << " ";
+            record->setLast(input);
+         }
+
+         getline(fin, input);
+         fin >> input >> input;
+         if (input.find("BIRT") != string::npos)
+         {
+            fin >> input >> input;
+
+            if (input.find("DATE") != string::npos)
+            {
+               // cout << "test3";
+               getline(fin, input);
+               input = input.substr(1);
+               cout << input << endl;
+               record->setBirth(input);
+               //function.setBirthYear     (input);
+            }
+         }
+         pedigree->insGen(temp);
+      }
+   }   
+   fin.close(); // close the file
+   return 0;
+}
+
